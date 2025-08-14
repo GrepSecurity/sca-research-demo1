@@ -1,0 +1,33 @@
+package com.loginsoft.research.nc_rule8.scenario4;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class NonCompliantScenario4 {
+
+    public enum HttpStatusCode {
+        OK, NOT_FOUND, INTERNAL_ERROR
+    }
+
+    public void execute() {
+        HttpStatusCode code = HttpStatusCode.INTERNAL_ERROR;
+
+        switch (code) {
+            case OK:
+                System.out.println("200 OK");
+                break;
+
+            case NOT_FOUND:
+                System.out.println("404 Not Found");
+                break;
+
+            default:
+                fallback: {  // ❌ Non-case label inside default
+                    System.out.println("An unknown error occurred.");
+                    System.out.println("Triggering fallback mechanism.");
+                    break fallback;  // ❌ This break is unrelated to switch/default
+                }
+                System.out.println("Fallback complete.");
+        }
+    }
+}
